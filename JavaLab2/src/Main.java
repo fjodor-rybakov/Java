@@ -18,10 +18,11 @@ public class Main {
         String resultPassword = passwordGenerator.generatePassword(87, "abdefg123456_");
         System.out.println(resultPassword);
 
-        /*TypeTable typeTable = new TypeTable();
-        typeTable.getTypes();*/
+        TypeTable typeTable = new TypeTable();
+        typeTable.getTypes();
 
         WordRating wordRating = new WordRating();
         wordRating.getRatingWords();
+        wordRating.printRating(wordRating.getRatingWords());
     }
 }
