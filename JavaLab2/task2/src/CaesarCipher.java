@@ -4,6 +4,9 @@ public class CaesarCipher {
     private ArrayList<Integer> positionUpperLetter = new ArrayList<>();
 
     public String cipher(String typeWork, int key, String cipherLine) {
+        if (checkInput(cipherLine)) {
+            return "Incorrect input";
+        }
         switch (typeWork) {
             case "-e":
                 return encoding(key, cipherLine);
@@ -33,6 +36,15 @@ public class CaesarCipher {
         return restoreLine(result.toString());
     }
 
+    private boolean checkInput(String line) {
+        for (int i = 0; i < line.length(); i++) {
+            if (!Character.isAlphabetic(line.charAt(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private String restoreLine(String cipherLine) {
         StringBuilder result = new StringBuilder(cipherLine);
 
@@ -43,12 +55,13 @@ public class CaesarCipher {
     }
 
     private int setCorrectIndex(int oldPos, int key) {
-        int newPos = oldPos + key;
+        int newKey = key > 26 || key < 26 ? key % 26 : key;
+        int newPos = oldPos + newKey;
 
         if (newPos > 122)
-            return oldPos + (key % 26);
+            return newPos - 26;
         if (newPos < 97)
-            return oldPos - (key % 26);
+            return newPos + 26;
 
         return newPos;
     }
