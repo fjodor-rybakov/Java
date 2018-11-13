@@ -1,16 +1,13 @@
 package discount;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Discount {
-    private Map<String, Boolean> isDiscountProducts = new HashMap<String, Boolean>();
+    private int discont;
 
-    public Map<String, Boolean> getIsDiscountProducts() {
-        return isDiscountProducts;
+    public int getDiscont() {
+        return discont;
     }
 
-    public void setIsDiscountProducts(String nameProduct, boolean isDiscount) {
-        this.isDiscountProducts.put(nameProduct, isDiscount);
+    public void setDiscont(int discont) {
+        this.discont = discont;
     }
 }
