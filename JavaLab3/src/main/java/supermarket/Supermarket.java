@@ -19,19 +19,23 @@ public class Supermarket {
         this.workTime.set(dayIndex, newWorkTime);
     }
 
-    public ArrayList<Product> getDataProducts() {
-        return dataProducts;
-    }
-
-    public void setDataProducts(Product product) {
-        this.dataProducts.add(product);
-    }
-
     public boolean isWork() {
         return isWork;
     }
 
     public void setWork(boolean work) {
         isWork = work;
+    }
+
+    public ArrayList<Product> getDataProducts() {
+        return this.dataProducts;
+    }
+
+    public void addDataProducts(Product product) {
+        this.dataProducts.add(product);
+    }
+
+    public void setDataProducts(ArrayList<Product> dataProducts) {
+        this.dataProducts = dataProducts;
     }
 }

@@ -11,6 +11,11 @@ public class GenerateCustomer {
     private Random random = new Random();
     private CustomerCategory customerCategory = new CustomerCategory();
 
+    public GenerateCustomer() {
+        this.maxAge = 100;
+        this.maxMoney = 10000;
+    }
+
     public GenerateCustomer(int maxAge, int maxMoney) {
         this.maxAge = maxAge;
         this.maxMoney = maxMoney;
