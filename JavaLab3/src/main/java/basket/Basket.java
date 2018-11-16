@@ -1,16 +1,20 @@
 package basket;
 
-import java.util.HashMap;
-import java.util.Map;
+import product.Product;
+import java.util.ArrayList;
 
 public class Basket {
-    private Map<String, Integer> basket = new HashMap<String, Integer>();
+    private ArrayList<Product> basket = new ArrayList<Product>();
 
-    public Map<String, Integer> getBasket() {
+    public ArrayList<Product> getBasket() {
         return this.basket;
     }
 
-    public void setBasket(String nameProduct, int countProduct) {
-        this.basket.put(nameProduct, countProduct);
+    public void setBasket(ArrayList<Product> basket) {
+        this.basket = basket;
+    }
+
+    public void addBasket(Product product) {
+        this.basket.add(product);
     }
 }

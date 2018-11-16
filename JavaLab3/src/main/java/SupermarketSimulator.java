@@ -17,8 +17,8 @@ public class SupermarketSimulator {
         supermarket.setDataProducts(allProducts);
 
         GenerateCustomer generateCustomer = new GenerateCustomer(100, 10000);
-//        ArrayList<Customer> allCustomers = generateCustomer.randomGenerateCustomer(10);
+        ArrayList<Customer> allCustomers = generateCustomer.randomGenerateCustomer(10);
 
-        supermarket.start(5);
+        supermarket.start(5, allCustomers);
     }
 }
