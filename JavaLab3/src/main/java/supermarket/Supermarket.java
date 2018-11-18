@@ -4,51 +4,85 @@ import cash_desk.CashDesk;
 import customer.Customer;
 import product.Product;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
+import java.util.*;
 
-public class Supermarket extends SupermarketStore {
+public class Supermarket extends CashDesk {
     private Random random = new Random();
+    private SupermarketStore store = new SupermarketStore();
+    private ArrayList<Product> dataProducts = new ArrayList<Product>();
 
     public void start(int numberDay, ArrayList<Customer> allCustomers) {
-        this.setWork(true);
-        this.setRandomArrival(numberDay, allCustomers.size());
-        this.setRandomBuy(allCustomers);
+        store.setWork(true);
+        ArrayList<Integer> timeArrival = this.setRandomArrival(numberDay, allCustomers.size());
+        ArrayList<Customer> allCustomersWithBasket = this.setRandomBuy(allCustomers);
+        this.updateTimeCustomer(timeArrival, allCustomersWithBasket);
     }
 
-    private void setRandomBuy(ArrayList<Customer> allCustomers) {
-        int countTypesProduct, idProduct, countProduct, maxCountTypeProduct = 10;
-        CashDesk cashDesk = new CashDesk();
-        Product currentProduct;
+    private ArrayList<Customer> setRandomBuy(ArrayList<Customer> allCustomers) {
+        int countTypesProduct, maxCountTypeProduct = 10;
         for (Customer customer : allCustomers) {
             countTypesProduct = random.nextInt(maxCountTypeProduct);
-            for (int i = 0; i < countTypesProduct; i++) {
-                idProduct = random.nextInt(this.getDataProducts().size());
-                currentProduct = this.getDataProducts().get(idProduct);
-                countProduct = random.nextInt(currentProduct.getCount());
-                if (countProduct == 0) {
-                    continue;
-                }
-                this.updateDataProduct(currentProduct.getCount() - countProduct, idProduct);
-                if (this.getDataProducts().get(idProduct).getCount() == 0) {
-                    System.out.println("Products is over");
-                }
-                System.out.println(currentProduct.getNameProduct());
-                System.out.println(countProduct);
-                Product newProduct = new Product(currentProduct.getNameProduct(), currentProduct.getPrice(), countProduct);
-                customer.addBasket(newProduct);
-            }
-            cashDesk.addCustomerQueue(customer);
+            this.fillBasketCustomer(countTypesProduct, customer);
             System.out.println("-------------------");
+        }
+        return allCustomers;
+    }
+
+    private void fillBasketCustomer(int countTypesProduct, Customer customer) {
+        int idProduct, countProduct;
+        Product currentProduct;
+        for (int i = 0; i < countTypesProduct; i++) {
+            idProduct = random.nextInt(this.getDataProducts().size());
+            currentProduct = this.getDataProducts().get(idProduct);
+            countProduct = random.nextInt(currentProduct.getCount());
+            if (countProduct == 0) {
+                continue;
+            }
+            this.updateDataProduct(currentProduct.getCount() - countProduct, idProduct);
+            if (this.getDataProducts().get(idProduct).getCount() == 0) {
+                System.out.println("Products is over");
+            }
+            System.out.println(currentProduct.getNameProduct());
+            System.out.println(countProduct);
+            Product newProduct = new Product(currentProduct.getNameProduct(), currentProduct.getPrice(), countProduct);
+            customer.addBasket(newProduct);
         }
     }
 
-    private void setRandomArrival(int numberDay, int countCustomers) {
-        int[] arrWorkTime =  this.getArray(numberDay);
+    private void updateTimeCustomer(ArrayList<Integer> timeArrival, ArrayList<Customer> allCustomersWithBasket) {
+        Map<Customer, Integer> newTimeArrivalCustomer = new HashMap<>();
+        int allSpendTime;
+        for (int i = 0; i < timeArrival.size(); i++) {
+            allSpendTime = allCustomersWithBasket.get(i).getBasket().size() + timeArrival.get(i);
+            newTimeArrivalCustomer.put(allCustomersWithBasket.get(i), allSpendTime);
+        }
+        int lastTime = 0;
+        newTimeArrivalCustomer = this.sortByValue(newTimeArrivalCustomer);
+        for (Map.Entry<Customer, Integer> queue : newTimeArrivalCustomer.entrySet()) {
+            lastTime = lastTime > queue.getValue() ? lastTime + 1 : queue.getValue() + 1;
+            this.addCustomerQueue(queue.getKey());
+            System.out.println(queue.getValue() + " - " + queue.getKey().getName());
+            System.out.println("[time " + lastTime + "] Customer - " + queue.getKey().getName() + " leave from supermarket");
+            this.removeCustomerQueue();
+        }
+    }
+
+    private <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
+        List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());
+        list.sort(Map.Entry.comparingByValue());
+
+        Map<K, V> result = new LinkedHashMap<>();
+        for (Map.Entry<K, V> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+
+        return result;
+    }
+
+    private ArrayList<Integer> setRandomArrival(int numberDay, int countCustomers) {
+        int[] arrWorkTime =  this.getArrayTime(numberDay);
         int timeWork = this.getTime(arrWorkTime);
-        System.out.println(timeWork);
+        System.out.println("[Work time] " + timeWork);
         int tempTime;
         ArrayList<Integer> timeArrival = new ArrayList<Integer>();
         for (int i = 0; i < countCustomers; i++) {
@@ -57,10 +91,11 @@ public class Supermarket extends SupermarketStore {
         }
         Collections.sort(timeArrival);
         System.out.println(timeArrival);
+        return timeArrival;
     }
 
-    private int[] getArray(int numberDay) {
-        String work = this.getWorkTime().get(numberDay - 1);
+    private int[] getArrayTime(int numberDay) {
+        String work = store.getWorkTime().get(numberDay - 1);
         String[] times = work.split(",");
         int[] arr = new int[4];
         try {
@@ -87,5 +122,29 @@ public class Supermarket extends SupermarketStore {
             result += times[3] - times[1];
         }
         return result;
+    }
+
+    public ArrayList<Product> getDataProducts() {
+        return this.dataProducts;
+    }
+
+    public void setDataProducts(ArrayList<Product> dataProducts) {
+        this.dataProducts = dataProducts;
+    }
+
+    public void addDataProducts(Product product) {
+        this.dataProducts.add(product);
+    }
+
+    public void updateDataProduct(int count, int index) {
+        String name = this.dataProducts.get(index).getNameProduct();
+        int price = this.dataProducts.get(index).getPrice();
+        Product temp = new Product(name, price, count);
+        this.dataProducts.set(index, temp);
+    }
+
+    public void updateDataProduct(String nameProduct, int price, int count, int index) {
+        Product temp = new Product(nameProduct, price, count);
+        this.dataProducts.set(index, temp);
     }
 }

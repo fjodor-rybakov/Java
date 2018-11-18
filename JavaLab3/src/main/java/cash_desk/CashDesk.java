@@ -12,10 +12,10 @@ public class CashDesk {
     }
 
     public void addCustomerQueue(Customer customer) {
-        this.customerQueue.add(customer);
+        this.customerQueue.offer(customer);
     }
 
-    public void removeCustomerQueue(Customer customer) {
-        this.customerQueue.remove(customer);
+    public void removeCustomerQueue() {
+        this.customerQueue.remove();
     }
 }
