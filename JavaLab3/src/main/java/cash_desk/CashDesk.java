@@ -1,21 +1,26 @@
 package cash_desk;
 
 import customer.Customer;
+import javafx.util.Pair;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class CashDesk {
-    private Queue<Customer> customerQueue = new ConcurrentLinkedQueue<Customer>();
+    private Queue<Pair<Customer, Integer>> customerQueue = new ConcurrentLinkedQueue<>();
 
-    public Queue<Customer> getCustomerQueue() {
-        return customerQueue;
+    public Queue<Pair<Customer, Integer>> getAllCustomerQueue() {
+        return this.customerQueue;
     }
 
-    public void addCustomerQueue(Customer customer) {
-        this.customerQueue.offer(customer);
+    public Pair<Customer, Integer> getCustomerQueue() {
+        return this.customerQueue.peek();
     }
 
-    public void removeCustomerQueue() {
-        this.customerQueue.remove();
+    public void addCustomerQueue(Customer customer, int time) {
+        this.customerQueue.offer(new Pair<>(customer, time));
+    }
+
+    public Pair<Customer, Integer> removeCustomerQueue() {
+        return this.customerQueue.poll();
     }
 }
