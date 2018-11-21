@@ -3,7 +3,6 @@ package cash_desk;
 import customer.Customer;
 import javafx.util.Pair;
 import product.Product;
-
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;

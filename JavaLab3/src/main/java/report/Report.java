@@ -1,16 +1,15 @@
 package report;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
 public class Report {
-    private Map<String, Integer> dataReport = new HashMap<String, Integer>();
+    private ArrayList<String> dataReport = new ArrayList<>();
 
-    public Map<String, Integer> getDataReport() {
-        return this.dataReport;
+    public ArrayList<String> getDataReport() {
+        return dataReport;
     }
 
-    public void setDataReport(String nameProduct, int countProduct) {
-        this.dataReport.put(nameProduct, countProduct);
+    public void setDataReport(ArrayList<String> dataReport) {
+        this.dataReport = dataReport;
     }
 }

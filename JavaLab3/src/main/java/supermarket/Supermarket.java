@@ -1,6 +1,7 @@
 package supermarket;
 
 import discount.Discount;
+import report.Report;
 import utils.Utils;
 import bill.Bill;
 import cash_desk.CashDesk;
@@ -17,13 +18,17 @@ public class Supermarket {
     private Map<Customer, Integer> allCustomers = new HashMap<>();
     private ArrayList<Product> dataProducts;
     private Discount discount = new Discount(20);
+    private Report report = new Report();
 
     public void start(int numberDay) {
         store.setWork(true);
+        System.out.println("Supermarket is opened");
         int time = 0, maxCountCustomers = 1 + random.nextInt(3);
         int[] arrWorkTime = Utils.getArrayTime(numberDay, this.store.getWorkTime());
         int timeWork = Utils.getTime(arrWorkTime), bill, type;
-        System.out.println("[Work time] " + timeWork + " min");
+        String message = "[Work time] " + timeWork + " min";
+        System.out.println(message);
+        report.getDataReport().add(message);
         Customer currentCustomer;
 
         while (time != timeWork) {
@@ -61,6 +66,10 @@ public class Supermarket {
                 timeWork++;
             }
         }
+        message = "Supermarket work " + timeWork + " min";
+        System.out.println(message);
+        System.out.println("Supermarket is closed");
+        report.getDataReport().add(message);
     }
 
     private boolean isSetRandomArrival() {
