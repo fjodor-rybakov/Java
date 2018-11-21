@@ -10,25 +10,21 @@ import customer.GenerateCustomer;
 import product.Product;
 import java.util.*;
 
-public class Supermarket {
+public class Supermarket extends SupermarketStore {
     private Random random = new Random();
     private CashDesk cashDesk = new CashDesk();
-    private SupermarketStore store = new SupermarketStore();
     private GenerateCustomer generateCustomer = new GenerateCustomer(100, 10000);
     private Map<Customer, Integer> allCustomers = new HashMap<>();
-    private ArrayList<Product> dataProducts;
     private Discount discount = new Discount(20);
-    private Report report = new Report();
 
-    public void start(int numberDay) {
-        store.setWork(true);
+    public void start(int numberDay, Report report) {
+        this.setWork(true);
         System.out.println("Supermarket is opened");
         int time = 0, maxCountCustomers = 1 + random.nextInt(3);
-        int[] arrWorkTime = Utils.getArrayTime(numberDay, this.store.getWorkTime());
+        int[] arrWorkTime = Utils.getArrayTime(numberDay, this.getWorkTime());
         int timeWork = Utils.getTime(arrWorkTime), bill, type;
         String message = "[Work time] " + timeWork + " min";
         System.out.println(message);
-        report.getDataReport().add(message);
         Customer currentCustomer;
 
         while (time != timeWork) {
@@ -40,14 +36,18 @@ public class Supermarket {
             if (cashDesk.getAllCustomerQueue().size() != 0 && cashDesk.getCustomerQueue().getValue() == time) {
                 currentCustomer = cashDesk.getCustomerQueue().getKey();
                 String name = currentCustomer.getName();
-                cashDesk.filterProduct(currentCustomer);
+                ArrayList<Product> restoreProducts = cashDesk.filterProduct(currentCustomer);
+//                System.out.println(restoreProducts);
+                for (Product product : restoreProducts) {
+                    this.updateDataProduct(product.getCount(), product);
+                }
                 bill = Bill.getBill(currentCustomer);
                 if (currentCustomer.getCustomerCategory().equals("Retired")) {
                     bill -= this.discount.getDiscount(bill);
                 }
                 type = random.nextInt(3);
                 System.out.println("[time " + time + "] Customer - " + name + " at the cash desk, amount to pay: " + bill);
-                store.setRevenue(bill + store.getRevenue());
+                this.setRevenue(bill + this.getRevenue());
                 System.out.println("[time " + time + "] Customer paid " + bill + " by " + currentCustomer.getPaymentMethods().getTypePayment(type));
                 cashDesk.removeCustomerQueue();
                 System.out.println("[time " + time + "] Customer - " + name + " leave from supermarket");
@@ -56,13 +56,13 @@ public class Supermarket {
                 ArrayList<Customer> newCustomers = this.generateCustomer.randomGenerateCustomer(maxCountCustomers);
                 this.setRandomBuy(time, newCustomers);
             }
-            if (this.isSetRandomArrival() && this.store.isWork()) {
+            if (this.isSetRandomArrival() && this.isWork()) {
                 ArrayList<Customer> newCustomers = this.generateCustomer.randomGenerateCustomer(maxCountCustomers);
                 this.setRandomBuy(time, newCustomers);
             }
             time++;
             if (time == timeWork && this.allCustomers.size() != 0) {
-                store.setWork(false);
+                this.setWork(false);
                 timeWork++;
             }
         }
@@ -70,6 +70,15 @@ public class Supermarket {
         System.out.println(message);
         System.out.println("Supermarket is closed");
         report.getDataReport().add(message);
+        for (Product product : this.getDataProducts()) {
+            report.getDataReport().add(
+                    "[" + product.getNameProduct() +
+                    ", price: " + product.getPrice() +
+                    ", count: " + product.getCount() +
+                    ", isAcceptAge: " + product.isAcceptAge() + "]"
+            );
+        }
+        report.getDataReport().add("Revenue per day: " + this.getRevenue());
     }
 
     private boolean isSetRandomArrival() {
@@ -145,30 +154,5 @@ public class Supermarket {
             );
             customer.addBasket(newProduct);
         }
-    }
-
-    public ArrayList<Product> getDataProducts() {
-        return this.dataProducts;
-    }
-
-    public void setDataProducts(ArrayList<Product> dataProducts) {
-        this.dataProducts = dataProducts;
-    }
-
-    public void addDataProducts(Product product) {
-        this.dataProducts.add(product);
-    }
-
-    public void updateDataProduct(int count, int index) {
-        String name = this.dataProducts.get(index).getNameProduct();
-        int price = this.dataProducts.get(index).getPrice();
-        boolean isAcceptAge = this.dataProducts.get(index).isAcceptAge();
-        Product temp = new Product(name, price, count, isAcceptAge);
-        this.dataProducts.set(index, temp);
-    }
-
-    public void updateDataProduct(String nameProduct, int price, int count, boolean isAcceptAge, int index) {
-        Product temp = new Product(nameProduct, price, count, isAcceptAge);
-        this.dataProducts.set(index, temp);
     }
 }

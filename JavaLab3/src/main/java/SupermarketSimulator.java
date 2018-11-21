@@ -1,11 +1,13 @@
 import product.GenerateProduct;
 import product.Product;
+import report.Report;
 import supermarket.Supermarket;
 
 import java.util.ArrayList;
 
 public class SupermarketSimulator {
     private static Supermarket supermarket = new Supermarket();
+    private static Report report = new Report();
 
     public static void main(String[] args) {
         System.out.println("[time 0] Supermarket products have been formed: ");
@@ -21,6 +23,10 @@ public class SupermarketSimulator {
             );
         }
 
-        supermarket.start(5);
+        supermarket.start(5, report);
+
+        for (String str : report.getDataReport()) {
+            System.out.println(str);
+        }
     }
 }
