@@ -30,7 +30,8 @@ public class GenerateProduct {
         String name = "product#" + String.valueOf(this.idProduct);
         int price = 1 + random.nextInt(this.maxPrice);
         int count = random.nextInt(this.maxCount);
+        boolean isAcceptAge = random.nextBoolean();
         this.idProduct++;
-        return new Product(name, price, count);
+        return new Product(name, price, count, isAcceptAge);
     }
 }

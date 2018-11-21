@@ -1,40 +1,51 @@
 package supermarket;
 
-import Utils.Utils;
+import discount.Discount;
+import utils.Utils;
+import bill.Bill;
 import cash_desk.CashDesk;
 import customer.Customer;
 import customer.GenerateCustomer;
-import javafx.util.Pair;
 import product.Product;
 import java.util.*;
 
-public class Supermarket extends CashDesk {
+public class Supermarket {
     private Random random = new Random();
+    private CashDesk cashDesk = new CashDesk();
     private SupermarketStore store = new SupermarketStore();
     private GenerateCustomer generateCustomer = new GenerateCustomer(100, 10000);
     private Map<Customer, Integer> allCustomers = new HashMap<>();
     private ArrayList<Product> dataProducts;
+    private Discount discount = new Discount(20);
 
     public void start(int numberDay) {
         store.setWork(true);
         int time = 0, maxCountCustomers = 1 + random.nextInt(3);
         int[] arrWorkTime = Utils.getArrayTime(numberDay, this.store.getWorkTime());
-        int timeWork = Utils.getTime(arrWorkTime);
-        Pair<Customer, Integer> removeCustomer;
+        int timeWork = Utils.getTime(arrWorkTime), bill, type;
         System.out.println("[Work time] " + timeWork + " min");
         Customer currentCustomer;
 
         while (time != timeWork) {
             currentCustomer = this.getCurrentCustomer(time);
             if (currentCustomer != null) {
-                this.addCustomerQueue(currentCustomer, time);
+                cashDesk.addCustomerQueue(currentCustomer, time);
                 this.allCustomers.remove(currentCustomer);
             }
-            if (this.getAllCustomerQueue().size() != 0 && this.getCustomerQueue().getValue() == time) {
-                removeCustomer = this.removeCustomerQueue();
-                String name = removeCustomer.getKey().getName();
-                int leaveTime = removeCustomer.getValue();
-                System.out.println("[time " + leaveTime + "] Customer - " + name + " leave from supermarket");
+            if (cashDesk.getAllCustomerQueue().size() != 0 && cashDesk.getCustomerQueue().getValue() == time) {
+                currentCustomer = cashDesk.getCustomerQueue().getKey();
+                String name = currentCustomer.getName();
+                cashDesk.filterProduct(currentCustomer);
+                bill = Bill.getBill(currentCustomer);
+                if (currentCustomer.getCustomerCategory().equals("Retired")) {
+                    bill -= this.discount.getDiscount(bill);
+                }
+                type = random.nextInt(3);
+                System.out.println("[time " + time + "] Customer - " + name + " at the cash desk, amount to pay: " + bill);
+                store.setRevenue(bill + store.getRevenue());
+                System.out.println("[time " + time + "] Customer paid " + bill + " by " + currentCustomer.getTypesPayment(type));
+                cashDesk.removeCustomerQueue();
+                System.out.println("[time " + time + "] Customer - " + name + " leave from supermarket");
             }
             if (time == 829) {
                 ArrayList<Customer> newCustomers = this.generateCustomer.randomGenerateCustomer(maxCountCustomers);
@@ -68,7 +79,7 @@ public class Supermarket extends CashDesk {
         return null;
     }
 
-    private ArrayList<Customer> setRandomBuy(int time, ArrayList<Customer> allCustomers) {
+    private void setRandomBuy(int time, ArrayList<Customer> allCustomers) {
         int countTypesProduct, maxCountTypeProduct = 10;
         for (Customer customer : allCustomers) {
             System.out.println("[time " + time + "] Customer " + customer.getName() + " is arrival");
@@ -80,7 +91,6 @@ public class Supermarket extends CashDesk {
                 this.allCustomers.put(customer, checkAllTime(time + customer.getBasket().size()));
             }
         }
-        return allCustomers;
     }
 
     private int checkAllTime(int time) {
@@ -105,6 +115,9 @@ public class Supermarket extends CashDesk {
                 continue;
             }
             countProductByCustomer = random.nextInt(currentProduct.getCount() + 1);
+            if (customer.getCountMoney() < Bill.getBill(customer)) {
+                break;
+            }
             currentCountProduct = currentProduct.getCount() - countProductByCustomer;
             if (currentCountProduct < 0) {
                 countProductByCustomer = countProductByCustomer - currentCountProduct;
@@ -115,7 +128,12 @@ public class Supermarket extends CashDesk {
                 System.out.println( "[time " + (time + i) + "] Product " + currentProduct.getNameProduct() + " is over");
             }
             System.out.println("[time " + (time + i) + "] Customer " + customer.getName() + " picked up " + countProductByCustomer + " units of " + currentProduct.getNameProduct());
-            Product newProduct = new Product(currentProduct.getNameProduct(), currentProduct.getPrice(), countProductByCustomer);
+            Product newProduct = new Product(
+                    currentProduct.getNameProduct(),
+                    currentProduct.getPrice(),
+                    countProductByCustomer,
+                    currentProduct.isAcceptAge()
+            );
             customer.addBasket(newProduct);
         }
     }
@@ -135,12 +153,13 @@ public class Supermarket extends CashDesk {
     public void updateDataProduct(int count, int index) {
         String name = this.dataProducts.get(index).getNameProduct();
         int price = this.dataProducts.get(index).getPrice();
-        Product temp = new Product(name, price, count);
+        boolean isAcceptAge = this.dataProducts.get(index).isAcceptAge();
+        Product temp = new Product(name, price, count, isAcceptAge);
         this.dataProducts.set(index, temp);
     }
 
-    public void updateDataProduct(String nameProduct, int price, int count, int index) {
-        Product temp = new Product(nameProduct, price, count);
+    public void updateDataProduct(String nameProduct, int price, int count, boolean isAcceptAge, int index) {
+        Product temp = new Product(nameProduct, price, count, isAcceptAge);
         this.dataProducts.set(index, temp);
     }
 }

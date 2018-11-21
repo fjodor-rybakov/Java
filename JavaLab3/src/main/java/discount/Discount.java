@@ -1,13 +1,16 @@
 package discount;
 
-public class Discount {
-    private int discont;
+import java.util.Random;
 
-    public int getDiscont() {
-        return discont;
+public class Discount {
+    private int discount;
+
+    public Discount(int maxDiscount) {
+        Random random = new Random();
+        discount = random.nextInt(maxDiscount + 1);
     }
 
-    public void setDiscont(int discont) {
-        this.discont = discont;
+    public int getDiscount(int price) {
+        return price - (price * discount / 100);
     }
 }

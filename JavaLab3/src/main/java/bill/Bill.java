@@ -1,16 +1,14 @@
 package bill;
 
+import customer.Customer;
 import product.Product;
-import java.util.ArrayList;
 
 public class Bill {
-    private ArrayList<Product> bill = new ArrayList<Product>();
-
-    public ArrayList<Product> getBill() {
-        return bill;
-    }
-
-    public void setBill(ArrayList<Product> bill) {
-        this.bill = bill;
+    public static int getBill(Customer customer) {
+        int result = 0;
+        for (Product product : customer.getBasket()) {
+            result += product.getCount() * product.getPrice();
+        }
+        return result;
     }
 }
