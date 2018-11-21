@@ -15,4 +15,8 @@ public class PaymentMethod {
     public void setPaymentMethods(String methods) {
         this.paymentMethods.add(methods);
     }
+
+    public String getTypePayment(int indexType) {
+        return this.paymentMethods.get(indexType);
+    }
 }

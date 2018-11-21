@@ -43,7 +43,7 @@ public class Supermarket {
                 type = random.nextInt(3);
                 System.out.println("[time " + time + "] Customer - " + name + " at the cash desk, amount to pay: " + bill);
                 store.setRevenue(bill + store.getRevenue());
-                System.out.println("[time " + time + "] Customer paid " + bill + " by " + currentCustomer.getTypesPayment(type));
+                System.out.println("[time " + time + "] Customer paid " + bill + " by " + currentCustomer.getPaymentMethods().getTypePayment(type));
                 cashDesk.removeCustomerQueue();
                 System.out.println("[time " + time + "] Customer - " + name + " leave from supermarket");
             }

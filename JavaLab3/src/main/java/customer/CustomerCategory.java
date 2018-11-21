@@ -16,6 +16,4 @@ public class CustomerCategory {
     public void setCategory(ArrayList<String> category) {
         this.category = category;
     }
-
-
 }
