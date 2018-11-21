@@ -1,8 +1,6 @@
 package product;
 
-import discount.Discount;
-
-public class Product extends Discount {
+public class Product {
     private String nameProduct;
     private int price;
     private int count;
