@@ -5,7 +5,7 @@ import product.Product;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class SupermarketStore {
+public class SupermarketStore implements ISupermarketStore {
     private boolean isWork = false;
     private ArrayList<Product> dataProducts;
     private int revenue = 0;
@@ -48,6 +48,9 @@ public class SupermarketStore {
 
     public void addDataProducts(Product product) {
         this.dataProducts.add(product);
+    }
+    public boolean isSetDataProducts() {
+        return this.dataProducts.size() != 0;
     }
 
     public void updateDataProduct(int count, Product product) {

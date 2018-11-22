@@ -3,7 +3,7 @@ package basket;
 import product.Product;
 import java.util.ArrayList;
 
-public class Basket {
+public class Basket implements IBasket {
     private ArrayList<Product> basket = new ArrayList<>();
 
     public ArrayList<Product> getBasket() {

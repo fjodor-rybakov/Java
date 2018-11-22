@@ -2,7 +2,7 @@ package discount;
 
 import java.util.Random;
 
-public class Discount {
+public class Discount implements IDiscount {
     private int discount;
 
     public Discount(int maxDiscount) {

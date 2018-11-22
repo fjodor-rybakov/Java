@@ -3,7 +3,7 @@ package customer;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class GenerateCustomer {
+public class GenerateCustomer implements IGenerateCustomer {
     private int idCustomer = 0;
     private int maxAge;
     private int maxMoney;

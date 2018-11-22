@@ -10,7 +10,7 @@ import customer.GenerateCustomer;
 import product.Product;
 import java.util.*;
 
-public class Supermarket extends SupermarketStore {
+public class Supermarket extends SupermarketStore implements ISupermarket {
     private Random random = new Random();
     private CashDesk cashDesk = new CashDesk();
     private GenerateCustomer generateCustomer = new GenerateCustomer(100, 10000);
@@ -37,7 +37,6 @@ public class Supermarket extends SupermarketStore {
                 currentCustomer = cashDesk.getCustomerQueue().getKey();
                 String name = currentCustomer.getName();
                 ArrayList<Product> restoreProducts = cashDesk.filterProduct(currentCustomer);
-//                System.out.println(restoreProducts);
                 for (Product product : restoreProducts) {
                     this.updateDataProduct(product.getCount(), product);
                 }
@@ -51,10 +50,6 @@ public class Supermarket extends SupermarketStore {
                 System.out.println("[time " + time + "] Customer paid " + bill + " by " + currentCustomer.getPaymentMethods().getTypePayment(type));
                 cashDesk.removeCustomerQueue();
                 System.out.println("[time " + time + "] Customer - " + name + " leave from supermarket");
-            }
-            if (time == 829) {
-                ArrayList<Customer> newCustomers = this.generateCustomer.randomGenerateCustomer(maxCountCustomers);
-                this.setRandomBuy(time, newCustomers);
             }
             if (this.isSetRandomArrival() && this.isWork()) {
                 ArrayList<Customer> newCustomers = this.generateCustomer.randomGenerateCustomer(maxCountCustomers);

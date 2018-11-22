@@ -1,6 +1,6 @@
 package product;
 
-public class Product {
+public class Product implements IProduct {
     private String nameProduct;
     private int price;
     private int count;

@@ -3,7 +3,7 @@ package customer;
 import basket.Basket;
 import payment_method.PaymentMethod;
 
-public class Customer extends Basket {
+public class Customer extends Basket implements ICustomer {
     private String name;
     private String customerCategory;
     private int age;

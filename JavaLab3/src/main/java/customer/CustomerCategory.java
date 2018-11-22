@@ -3,7 +3,7 @@ package customer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class CustomerCategory {
+public class CustomerCategory implements ICustomerCategory {
     private ArrayList<String> category = new ArrayList<String>(
             Arrays.asList("Child", "Adult", "Retired")
     );

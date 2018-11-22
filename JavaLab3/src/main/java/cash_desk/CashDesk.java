@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class CashDesk {
+public class CashDesk implements ICashDesk {
     private Queue<Pair<Customer, Integer>> customerQueue = new ConcurrentLinkedQueue<>();
 
     public Queue<Pair<Customer, Integer>> getAllCustomerQueue() {

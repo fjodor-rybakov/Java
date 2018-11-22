@@ -3,7 +3,7 @@ package product;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class GenerateProduct {
+public class GenerateProduct implements IGenerateProduct {
     private int idProduct = 0;
     private int maxPrice;
     private int maxCount;

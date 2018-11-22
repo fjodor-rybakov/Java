@@ -3,7 +3,7 @@ package payment_method;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class PaymentMethod {
+public class PaymentMethod implements IPaymentMethod {
     private ArrayList<String> paymentMethods = new ArrayList<String>(
             Arrays.asList("card", "cash", "bonus")
     );
