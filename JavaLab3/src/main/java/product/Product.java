@@ -17,31 +17,15 @@ public class Product implements IProduct {
         return nameProduct;
     }
 
-    public void setNameProduct(String nameProduct) {
-        this.nameProduct = nameProduct;
-    }
-
     public int getPrice() {
         return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
     }
 
     public int getCount() {
         return count;
     }
 
-    public void setCount(int count) {
-        this.count = count;
-    }
-
     public boolean isAcceptAge() {
         return isAcceptAge;
-    }
-
-    public void setAcceptAge(boolean acceptAge) {
-        isAcceptAge = acceptAge;
     }
 }

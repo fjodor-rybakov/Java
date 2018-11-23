@@ -8,14 +8,6 @@ public class PaymentMethod implements IPaymentMethod {
             Arrays.asList("card", "cash", "bonus")
     );
 
-    public ArrayList<String> getPaymentMethods() {
-        return paymentMethods;
-    }
-
-    public void setPaymentMethods(String methods) {
-        this.paymentMethods.add(methods);
-    }
-
     public String getTypePayment(int indexType) {
         return this.paymentMethods.get(indexType);
     }

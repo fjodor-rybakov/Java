@@ -10,10 +10,6 @@ public class Basket implements IBasket {
         return this.basket;
     }
 
-    public void setBasket(ArrayList<Product> basket) {
-        this.basket = basket;
-    }
-
     public void addBasket(Product product) {
         this.basket.add(product);
     }

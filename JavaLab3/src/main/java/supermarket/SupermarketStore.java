@@ -17,10 +17,6 @@ public class SupermarketStore implements ISupermarketStore {
         return this.workTime;
     }
 
-    public void setWorkTime(int dayIndex, String newWorkTime) {
-        this.workTime.set(dayIndex, newWorkTime);
-    }
-
     protected boolean isWork() {
         return isWork;
     }
@@ -46,9 +42,6 @@ public class SupermarketStore implements ISupermarketStore {
         this.dataProducts = dataProducts;
     }
 
-    public void addDataProducts(Product product) {
-        this.dataProducts.add(product);
-    }
     public boolean isSetDataProducts() {
         return this.dataProducts.size() != 0;
     }
@@ -67,11 +60,6 @@ public class SupermarketStore implements ISupermarketStore {
         int price = this.dataProducts.get(index).getPrice();
         boolean isAcceptAge = this.dataProducts.get(index).isAcceptAge();
         Product temp = new Product(name, price, count, isAcceptAge);
-        this.dataProducts.set(index, temp);
-    }
-
-    public void updateDataProduct(String nameProduct, int price, int count, boolean isAcceptAge, int index) {
-        Product temp = new Product(nameProduct, price, count, isAcceptAge);
         this.dataProducts.set(index, temp);
     }
 
