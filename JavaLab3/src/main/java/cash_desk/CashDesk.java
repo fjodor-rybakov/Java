@@ -3,6 +3,7 @@ package cash_desk;
 import customer.Customer;
 import javafx.util.Pair;
 import product.Product;
+import utils.Logger;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,6 +12,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class CashDesk implements ICashDesk {
     private Queue<Pair<Customer, Integer>> customerQueue = new ConcurrentLinkedQueue<>();
+    private Logger logger = new Logger(true);
 
     public Queue<Pair<Customer, Integer>> getAllCustomerQueue() {
         return this.customerQueue;
@@ -35,7 +37,7 @@ public class CashDesk implements ICashDesk {
             currentProduct = it.next();
             if (!currentProduct.isAcceptAge() && currentCustomer.getCustomerCategory().equals("Child")) {
                 dataProduct.add(currentProduct);
-                System.out.println("This product not accept for your category: " + currentProduct.getNameProduct());
+                logger.printLog("This product not accept for your category: " + currentProduct.getNameProduct());
                 it.remove();
             }
         }

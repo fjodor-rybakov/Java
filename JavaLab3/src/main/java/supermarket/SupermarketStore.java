@@ -1,12 +1,14 @@
 package supermarket;
 
 import product.Product;
+import utils.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class SupermarketStore implements ISupermarketStore {
     private boolean isWork = false;
+    private Logger logger = new Logger(true);
     private ArrayList<Product> dataProducts;
     private int revenue = 0;
     private ArrayList<String> workTime = new ArrayList<>(
@@ -49,7 +51,7 @@ public class SupermarketStore implements ISupermarketStore {
     public void updateDataProduct(int count, Product product) {
         int index = this.getIndexProduct(product);
         if (index == -1) {
-            System.out.println("No such product");
+            logger.printLog("No such product");
             return;
         }
         this.updateDataProduct(count, index);

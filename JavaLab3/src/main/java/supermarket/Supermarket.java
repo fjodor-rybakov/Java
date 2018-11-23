@@ -2,6 +2,7 @@ package supermarket;
 
 import discount.Discount;
 import report.Report;
+import utils.Logger;
 import utils.Utils;
 import bill.Bill;
 import cash_desk.CashDesk;
@@ -16,15 +17,16 @@ public class Supermarket extends SupermarketStore implements ISupermarket {
     private GenerateCustomer generateCustomer = new GenerateCustomer(100, 10000);
     private Map<Customer, Integer> allCustomers = new HashMap<>();
     private Discount discount = new Discount(20);
+    private Logger logger = new Logger(true);
 
     public void start(int numberDay, Report report) {
         this.setWork(true);
-        System.out.println("Supermarket is opened");
+        logger.printLog("Supermarket is opened");
         int time = 0, maxCountCustomers = 1 + random.nextInt(3);
         int[] arrWorkTime = Utils.getArrayTime(numberDay, this.getWorkTime());
         int timeWork = Utils.getTime(arrWorkTime), bill, type;
         String message = "[Work time] " + timeWork + " min";
-        System.out.println(message);
+        logger.printLog(message);
         Customer currentCustomer;
 
         while (time != timeWork) {
@@ -45,11 +47,11 @@ public class Supermarket extends SupermarketStore implements ISupermarket {
                     bill -= this.discount.getDiscount(bill);
                 }
                 type = random.nextInt(3);
-                System.out.println("[time " + time + "] Customer - " + name + " at the cash desk, amount to pay: " + bill);
+                logger.printLog("[time " + time + "] Customer - " + name + " at the cash desk, amount to pay: " + bill);
                 this.setRevenue(bill + this.getRevenue());
-                System.out.println("[time " + time + "] Customer paid " + bill + " by " + currentCustomer.getPaymentMethods().getTypePayment(type));
+                logger.printLog("[time " + time + "] Customer paid " + bill + " by " + currentCustomer.getPaymentMethods().getTypePayment(type));
                 cashDesk.removeCustomerQueue();
-                System.out.println("[time " + time + "] Customer - " + name + " leave from supermarket");
+                logger.printLog("[time " + time + "] Customer - " + name + " leave from supermarket");
             }
             if (this.isSetRandomArrival() && this.isWork()) {
                 ArrayList<Customer> newCustomers = this.generateCustomer.randomGenerateCustomer(maxCountCustomers);
@@ -62,8 +64,8 @@ public class Supermarket extends SupermarketStore implements ISupermarket {
             }
         }
         message = "Supermarket work " + timeWork + " min";
-        System.out.println(message);
-        System.out.println("Supermarket is closed");
+        logger.printLog(message);
+        logger.printLog("Supermarket is closed");
         report.getDataReport().add(message);
         for (Product product : this.getDataProducts()) {
             report.getDataReport().add(
@@ -95,11 +97,11 @@ public class Supermarket extends SupermarketStore implements ISupermarket {
     private void setRandomBuy(int time, ArrayList<Customer> allCustomers) {
         int countTypesProduct, maxCountTypeProduct = 10;
         for (Customer customer : allCustomers) {
-            System.out.println("[time " + time + "] Customer " + customer.getName() + " is arrival");
+            logger.printLog("[time " + time + "] Customer " + customer.getName() + " is arrival");
             countTypesProduct = random.nextInt(maxCountTypeProduct);
             this.fillBasketCustomer(time, countTypesProduct, customer);
             if (customer.getBasket().size() == 0) {
-                System.out.println("[time " + time + "] Customer - " + customer.getName() + " leave from supermarket");
+                logger.printLog("[time " + time + "] Customer - " + customer.getName() + " leave from supermarket");
             } else {
                 this.allCustomers.put(customer, checkAllTime(time + customer.getBasket().size()));
             }
@@ -138,9 +140,9 @@ public class Supermarket extends SupermarketStore implements ISupermarket {
             }
             this.updateDataProduct(currentCountProduct, idProduct);
             if (this.getDataProducts().get(idProduct).getCount() == 0) {
-                System.out.println( "[time " + (time + i) + "] Product " + currentProduct.getNameProduct() + " is over");
+                logger.printLog( "[time " + (time + i) + "] Product " + currentProduct.getNameProduct() + " is over");
             }
-            System.out.println("[time " + (time + i) + "] Customer " + customer.getName() + " picked up " + countProductByCustomer + " units of " + currentProduct.getNameProduct());
+            logger.printLog("[time " + (time + i) + "] Customer " + customer.getName() + " picked up " + countProductByCustomer + " units of " + currentProduct.getNameProduct());
             Product newProduct = new Product(
                     currentProduct.getNameProduct(),
                     currentProduct.getPrice(),
