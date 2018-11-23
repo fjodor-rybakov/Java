@@ -25,12 +25,10 @@ public class Supermarket extends SupermarketStore implements ISupermarket {
         int time = 0, maxCountCustomers = 1 + random.nextInt(3);
         int[] arrWorkTime = Utils.getArrayTime(numberDay, this.getWorkTime());
         int timeWork = Utils.getTime(arrWorkTime), bill, type;
-        String message = "[Work time] " + timeWork + " min";
-        logger.printLog(message);
-        Customer currentCustomer;
+        logger.printLog("[Work time] " + timeWork + " min");
 
         while (time != timeWork) {
-            currentCustomer = this.getCurrentCustomer(time);
+            Customer currentCustomer = this.getCurrentCustomer(time);
             if (currentCustomer != null) {
                 cashDesk.addCustomerQueue(currentCustomer, time);
                 this.allCustomers.remove(currentCustomer);
@@ -63,7 +61,7 @@ public class Supermarket extends SupermarketStore implements ISupermarket {
                 timeWork++;
             }
         }
-        message = "Supermarket work " + timeWork + " min";
+        String message = "Supermarket work " + timeWork + " min";
         logger.printLog(message);
         logger.printLog("Supermarket is closed");
         report.getDataReport().add(message);
