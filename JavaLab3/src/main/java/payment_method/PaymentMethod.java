@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PaymentMethod implements IPaymentMethod {
-    private ArrayList<String> paymentMethods = new ArrayList<String>(
+    private ArrayList<String> paymentMethods = new ArrayList<>(
             Arrays.asList("card", "cash", "bonus")
     );
 

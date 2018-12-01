@@ -16,7 +16,11 @@ public class SpreadsheetEngine {
             try {
                 result = commands.parseData(spreadsheet, value);
                 if (!result.isEmpty()) {
-                    spreadsheet.setSpreadsheetValue(result.getCol(), result.getRow(), result.getValue());
+                    if (result.getCommand().equals("set")) {
+                        spreadsheet.setSpreadsheetValue(result.getCol(), result.getRow(), result.getValue());
+                    } else if (result.getCommand().equals("setformula")) {
+                        spreadsheet.setSpreadsheetFormula(result.getCol(), result.getRow(), result.getValue());
+                    }
                 }
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());

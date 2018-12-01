@@ -37,7 +37,16 @@ public class Commands {
         }
     }
 
-    public Data parseSetformula(String value) {
-        return new Data();
+    public Data parseSetformula(String value) throws Exception {
+        try {
+            String[] splittingValue = value.split(" ");
+            String command = splittingValue[0].toLowerCase();
+            String col = splittingValue[splittingValue.length - 1].split("")[0].toUpperCase();
+            int row = Integer.parseInt(splittingValue[splittingValue.length - 1].split("")[1]);
+            String resultValue = value.substring(splittingValue.length, value.length() - splittingValue[splittingValue.length - 1].length() - 1);
+            return new Data(command, col, row, resultValue);
+        } catch (Exception error) {
+            throw new Exception("Ошибка чтения строки");
+        }
     }
 }

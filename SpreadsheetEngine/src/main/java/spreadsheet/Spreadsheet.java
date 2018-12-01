@@ -2,13 +2,11 @@ package spreadsheet;
 
 import cell.Cell;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 public class Spreadsheet {
     private TreeMap<String, TreeMap<Integer, Cell>> spreadsheet = new TreeMap<>();
+    private CalculateFormula calculateFormula = new CalculateFormula(this);
 
     public TreeMap<String, TreeMap<Integer, Cell>> getSpreadsheet() {
         return spreadsheet;
@@ -19,7 +17,8 @@ public class Spreadsheet {
     }
 
     public void setSpreadsheetFormula(String col, int row, String value) {
-
+        String[] splittingValue = value.split(" ");
+        calculateFormula.calculate(splittingValue);
     }
 
     public void setSpreadsheetValue(String col, int row, String value) {
@@ -57,7 +56,7 @@ public class Spreadsheet {
         System.out.println();
     }
 
-    public void printSpreadsheetValue(String col, int row) {
-        System.out.println(spreadsheet.get(col).get(row).getCell());
+    public String getSpreadsheetValue(String col, int row) {
+        return spreadsheet.get(col).get(row).getCell();
     }
 }
