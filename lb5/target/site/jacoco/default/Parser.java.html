@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Parser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lb5</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Parser.java</span></div><h1>Parser.java</h1><pre class="source lang-java linenums">import java.util.HashMap;
+import java.util.Map;
+
+class Parser {
+    private String protocol;
+    private String domain;
+    private short port;
+    private String document;
+    private String err;
+
+<span class="nc" id="L11">    private Map&lt;String, Short&gt; Protocol = new HashMap&lt;String, Short&gt;();</span>
+
+    private void initProtocol() {
+<span class="nc" id="L14">        Protocol.put(&quot;HTTP&quot;, (short) 80);</span>
+<span class="nc" id="L15">        Protocol.put(&quot;HTTPS&quot;, (short) 443);</span>
+<span class="nc" id="L16">    }</span>
+
+<span class="nc" id="L18">    Parser(String url) {</span>
+<span class="nc" id="L19">        this.err = getDataFullUrl(url);</span>
+<span class="nc" id="L20">    }</span>
+
+    private String getDataFullUrl(String url) {
+<span class="nc bnc" id="L23" title="All 2 branches missed.">        if (url.isEmpty()) {</span>
+<span class="nc" id="L24">            return &quot;Not found URL&quot;;</span>
+        }
+
+<span class="nc" id="L27">        String urlParts[] = url.toLowerCase().split(&quot;/&quot;);</span>
+
+<span class="nc bnc" id="L29" title="All 4 branches missed.">        if (urlParts.length &gt; 0 &amp;&amp; urlParts[0] != null) {</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">            if (urlParts[0].equals(&quot;&quot;)) {</span>
+<span class="nc" id="L31">                return &quot;Incorrect Protocol&quot;;</span>
+            }
+<span class="nc" id="L33">            String protocol = urlParts[0].substring(0, urlParts[0].length() - 1);</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">            if (!checkProtocol(protocol)) {</span>
+<span class="nc" id="L35">                return &quot;Incorrect Protocol&quot;;</span>
+            }
+<span class="nc" id="L37">        } else {</span>
+<span class="nc" id="L38">            return &quot;Protocol is empty&quot;;</span>
+        }
+
+<span class="nc bnc" id="L41" title="All 6 branches missed.">        if (urlParts.length &gt; 1 &amp;&amp; urlParts[1] != null &amp;&amp; !urlParts[1].equals(&quot;&quot;)) {</span>
+<span class="nc" id="L42">            return &quot;Incorrect URL&quot;;</span>
+        }
+
+<span class="nc bnc" id="L45" title="All 4 branches missed.">        if (urlParts.length &gt; 2 &amp;&amp; urlParts[2] != null) {</span>
+<span class="nc" id="L46">            String portParts[] = urlParts[2].split(&quot;:&quot;);</span>
+<span class="nc bnc" id="L47" title="All 4 branches missed.">            if (portParts.length == 0 || !checkDomain(portParts[0])) {</span>
+<span class="nc" id="L48">                return &quot;Incorrect Domain&quot;;</span>
+            }
+<span class="nc" id="L50">        } else {</span>
+<span class="nc" id="L51">            return &quot;Domain is empty&quot;;</span>
+        }
+
+<span class="nc" id="L54">        String portParts[] = urlParts[2].split(&quot;:&quot;);</span>
+
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if (portParts.length != 1) {</span>
+<span class="nc" id="L57">            String port = portParts[1];</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">            if (!checkPort(port)) {</span>
+<span class="nc" id="L59">                return &quot;Incorrect Port&quot;;</span>
+            }
+<span class="nc" id="L61">        } else {</span>
+<span class="nc" id="L62">            this.port = Protocol.get(this.protocol.toUpperCase());</span>
+        }
+
+<span class="nc bnc" id="L65" title="All 4 branches missed.">        if (urlParts.length &gt; 3 &amp;&amp; urlParts[3] != null) {</span>
+<span class="nc" id="L66">            String document = url.substring(url.indexOf(urlParts[3]));</span>
+<span class="nc bnc" id="L67" title="All 4 branches missed.">            this.document = document.isEmpty() || document.charAt(0) != '/' ? &quot;/&quot; + document : document;</span>
+<span class="nc" id="L68">        } else {</span>
+<span class="nc" id="L69">            this.document = &quot;/&quot;;</span>
+        }
+
+<span class="nc" id="L72">        return &quot;&quot;;</span>
+    }
+
+    private boolean checkProtocol(String protocol) {
+<span class="nc" id="L76">        initProtocol();</span>
+<span class="nc bnc" id="L77" title="All 4 branches missed.">        if (protocol.equals(&quot;http&quot;) || protocol.equals(&quot;https&quot;)) {</span>
+<span class="nc" id="L78">            this.protocol = protocol;</span>
+<span class="nc" id="L79">            return true;</span>
+        }
+<span class="nc" id="L81">        return false;</span>
+    }
+
+    private boolean checkDomain(String domain) {
+<span class="nc bnc" id="L85" title="All 4 branches missed.">        if (domain.length() &lt; 2 || domain.length() &gt; 63) {</span>
+<span class="nc" id="L86">            return false; // Содержит не менее 2 и не более 63 символов;</span>
+        }
+
+<span class="nc bnc" id="L89" title="All 4 branches missed.">        if (!(Character.isDigit(domain.charAt(0)) || Character.isAlphabetic(domain.charAt(0)))) {</span>
+<span class="nc" id="L90">            return false; // Первый символ либо буква, либо цифра</span>
+        }
+
+<span class="nc bnc" id="L93" title="All 4 branches missed.">        if (!(Character.isDigit(domain.charAt(domain.length() - 1)) || Character.isAlphabetic(domain.charAt(domain.length() - 1)))) {</span>
+<span class="nc" id="L94">            return false; // Последний символ либо буква, либо цифра</span>
+        }
+
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        if (!domain.matches(&quot;^[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,6}$&quot;)) {</span>
+<span class="nc" id="L98">            return false; //  Не содержат символов, отличных от букв, цифр и дефиса</span>
+        }
+
+<span class="nc bnc" id="L101" title="All 4 branches missed.">        if (domain.charAt(2) == '-' &amp;&amp; domain.charAt(3) == '-') {</span>
+<span class="nc" id="L102">            return false; // Yе содержат одновременно дефисы в 3-й и 4-й позициях.</span>
+        }
+<span class="nc" id="L104">        this.domain = domain;</span>
+
+<span class="nc" id="L106">        return true;</span>
+    }
+
+    private boolean checkPort(String port) {
+        try {
+<span class="nc" id="L111">            Short port_num = Short.valueOf(port);</span>
+<span class="nc bnc" id="L112" title="All 4 branches missed.">            if (port_num &lt;= 1 || port_num &gt;= Short.MAX_VALUE) {</span>
+<span class="nc" id="L113">                return false;</span>
+            }
+<span class="nc" id="L115">            this.port = port_num;</span>
+<span class="nc" id="L116">            return true;</span>
+<span class="nc" id="L117">        } catch (Exception err) {</span>
+<span class="nc" id="L118">            return false;</span>
+        }
+    }
+
+    String getUrl() {
+        String url;
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        if (this.document == null) {</span>
+<span class="nc" id="L125">            url = this.protocol + &quot;://&quot; + this.domain + &quot;:&quot; + this.getPort();</span>
+        } else {
+<span class="nc" id="L127">            url = this.protocol + &quot;://&quot; + this.domain + &quot;:&quot; + this.getPort() + this.document;</span>
+        }
+
+<span class="nc" id="L130">        return url;</span>
+    }
+
+    String getProtocol() {
+<span class="nc" id="L134">        return this.protocol;</span>
+    }
+
+    short getPort() {
+<span class="nc" id="L138">        return this.port;</span>
+    }
+
+    String getDomain() {
+<span class="nc" id="L142">        return this.domain;</span>
+    }
+
+    String getDocument() {
+<span class="nc" id="L146">        return this.document;</span>
+    }
+
+    String getErr() {
+<span class="nc" id="L150">        return this.err;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
